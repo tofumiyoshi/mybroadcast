@@ -221,25 +221,25 @@ public class FSM implements java.io.Serializable {
      * @return Returns the Current State as String
      */
     public Object ProcessFSM(String recvdMsgId) {
-        Object _r;
-        _r = this._fsm.getCurrentState().getNewTransitionMap().get(recvdMsgId);
-        if ( null != _r) {
+        FSMTransitionInfo transitionInfo;
+        transitionInfo = this._fsm.getCurrentState().getNewTransitionMap().get(recvdMsgId);
+        if ( null != transitionInfo) {
             String[] _t = new String[2];
-            _t[0] = ((FSMTransitionInfo)_r).getActionName();
-            _t[1] = ((FSMTransitionInfo)_r).getNextState();
+            _t[0] = transitionInfo.getActionName();
+            _t[1] = transitionInfo.getNextState();
             boolean status = true;
-            for (Object _f: this._fsm.getAllStates()) {
-                if( ((FSMState)_f).getCurrentState().equals((String)_t[1])) {
+            for (FSMState state: this._fsm.getAllStates()) {
+                if(state.getCurrentState().equals((String)_t[1])) {
                     /* Check if the action specific to each message exists
                        If not, then in this case call the generic action function
                     */
-                    FSMStateAction _a = ((FSMState)_f).getBeforeTransition();
+                    FSMStateAction _a = state.getBeforeTransition();
                     if (_a!=null) {
-                        _a.stateTransition(((FSMState)_f).getCurrentState(), 
+                        _a.stateTransition(state.getCurrentState(),
                                 this._sharedData);
                     }
                     
-                    FSMAction act = ((FSMTransitionInfo)_r).getAction();
+                    FSMAction act = transitionInfo.getAction();
                     if (act!=null) {
                         /* If customized action is declared, call an entry function */
                         act.entry(this._fsm.getCurrentState().getCurrentState(), 
@@ -247,13 +247,12 @@ public class FSM implements java.io.Serializable {
                         status = act.action(this._fsm.getCurrentState().getCurrentState(), 
                                 (String)_t[0], (String)_t[1], this._sharedData);
                     } else if ( null != this._action) {
-                        status = 
-                        this._action.action(this._fsm.getCurrentState().getCurrentState(), 
-                                (String)_t[0], (String)_t[1], this._sharedData);
+                        status = this._action.action(this._fsm.getCurrentState().getCurrentState(),
+                                        (String)_t[0], (String)_t[1], this._sharedData);
                     }
                     
                     if(status) {
-                        this._fsm.setCurrentState((FSMState)_f);
+                        this._fsm.setCurrentState(state);
                         
                         if (act!=null) {
                             act.afterTransition(this._fsm.getCurrentState().getCurrentState(), 
@@ -270,9 +269,9 @@ public class FSM implements java.io.Serializable {
                                 (String)_t[0], (String)_t[1], this._sharedData);
                     }
                     
-                    FSMStateAction _b = ((FSMState)_f).getAfterTransition();
+                    FSMStateAction _b = state.getAfterTransition();
                     if (_b!=null) {
-                        _b.stateTransition(((FSMState)_f).getCurrentState(), 
+                        _b.stateTransition(state.getCurrentState(),
                                 this._sharedData);
                     }
                     
@@ -280,7 +279,7 @@ public class FSM implements java.io.Serializable {
                 }
             }
         }
-        return _r;
+        return transitionInfo;
     }
 
     /**

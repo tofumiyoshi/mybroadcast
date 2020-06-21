@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -41,6 +42,7 @@ import java.io.IOException;
  * so that {@link MainActivity} can control music playback.
  */
 public final class MediaPlayerAdapter extends PlayerAdapter {
+    private static final String TAG = MediaPlayerAdapter.class.getSimpleName();
 
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
@@ -168,7 +170,10 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
                 public void onComplete(@NonNull Task<Uri> task) {
                     try {
                         if (task.isSuccessful() && task.getResult() != null) {
-                            mMediaPlayer.setDataSource(mContext, task.getResult());
+                            Uri uri = task.getResult();
+                            Log.d(TAG, uri.toString());
+
+                            mMediaPlayer.setDataSource(mContext, uri);
 
                             try {
                                 mMediaPlayer.prepare();

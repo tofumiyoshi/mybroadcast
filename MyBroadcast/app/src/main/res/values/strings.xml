@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">MyBroadcast</string>
 
+    <string name="player_activity_name">Media player</string>
+    <string name="track_selection_title">Select tracks</string>
+    <string name="download_start_error">Failed to start download</string>
+
     <string name="label_stop">Stop</string>
     <string name="label_pause">Pause</string>
     <string name="label_play">Play</string>

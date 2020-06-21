@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
@@ -23,7 +24,7 @@ import com.fumi.mybroadcast.R;
 import com.fumi.mybroadcast.client.MediaBrowserHelper;
 import com.fumi.mybroadcast.service.MusicService;
 import com.fumi.mybroadcast.service.contentcatalogs.MusicLibrary;
-import com.fumi.mybroadcast.statemachine.example.Example;
+import com.fumi.mybroadcast.statemachine.FSMTask;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,13 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean mIsPlaying;
 
+    private FSMTask mFSMTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //Example.excute(this);
-
 
         mTitleTextView = findViewById(R.id.song_title);
         mArtistTextView = findViewById(R.id.song_artist);
@@ -75,10 +77,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+        mMediaBrowserHelper.onStart();
 
         init();
+    }
 
-        mMediaBrowserHelper.onStart();
+    @Override
+    public void onResume() {
+        super.onResume();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -94,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
             createSignInIntent();
             return;
         }
+
+        //mFSMTask = new FSMTask(MainActivity.this, mMediaBrowserHelper);
+        //mFSMTask.execute("place-config.xml");
     }
 
     public void createSignInIntent() {

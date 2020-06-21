@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FSM>
+    <STATE id="在宅" type="ID">
+        <MESSAGE id="出発" action="Jazz_In_Paris" nextState="北綾瀬駅へ移動中" />
+    </STATE>
+    <STATE id="北綾瀬駅へ移動中">
+        <MESSAGE id="北綾瀬駅" action="The_Coldest_Shoulder" nextState="電車中" />
+    </STATE>
+    <STATE id="電車中">
+        <MESSAGE id="代々木公園駅" action="Jazz_In_Paris" nextState="NHKニュースセンターへ移動中" />
+    </STATE>
+    <STATE id="NHKニュースセンターへ移動中">
+        <MESSAGE id="NHKニュースセンター" action="The_Coldest_Shoulder" nextState="仕事中" />
+    </STATE>
+    <STATE id="仕事中" />
+</FSM>
