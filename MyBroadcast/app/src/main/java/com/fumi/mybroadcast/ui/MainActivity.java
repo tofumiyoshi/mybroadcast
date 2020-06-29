@@ -28,6 +28,7 @@ import com.fumi.mybroadcast.statemachine.FSMTask;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
             createSignInIntent();
             return;
         }
+
+        //FirebaseUser user = mAuth.getCurrentUser();
 
         //mFSMTask = new FSMTask(MainActivity.this, mMediaBrowserHelper);
         //mFSMTask.execute("place-config.xml");
